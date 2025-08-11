@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fleur de Peau - El arte de habitar tu piel</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Definición de la paleta de colores y tipografía de la marca */
+        :root {
+            --color-charcoal: #1a1a1a;
+            --color-peach: #f4e9e1;
+            --color-gold: #8c7851;
+            --color-merlot: #4a2a2a;
+            --font-header: 'Playfair Display', serif;
+            --font-body: 'Lato', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--color-peach);
+            color: var(--color-charcoal);
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-header);
+        }
+
+        /* Clases de utilidad personalizadas */
+        .bg-charcoal { background-color: var(--color-charcoal); }
+        .text-charcoal { color: var(--color-charcoal); }
+        .bg-peach { background-color: var(--color-peach); }
+        .text-peach { color: var(--color-peach); }
+        .bg-gold { background-color: var(--color-gold); }
+        .text-gold { color: var(--color-gold); }
+        .border-gold { border-color: var(--color-gold); }
+        .bg-merlot { background-color: var(--color-merlot); }
+        .text-merlot { color: var(--color-merlot); }
+
+        .font-header { font-family: var(--font-header); }
+        .font-body { font-family: var(--font-body); }
+
+        .transition-all {
+            transition: all 0.3s ease-in-out;
+        }
+        
+        /* Estilos para el video de fondo de YouTube */
+        .youtube-background-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+        .youtube-background-container iframe {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+        /* Ajuste para mantener la relación de aspecto del video */
+        @media (min-aspect-ratio: 16/9) {
+          .youtube-background-container iframe {
+            height: 56.25vw; /* 100 * 9 / 16 */
+          }
+        }
+        @media (max-aspect-ratio: 16/9) {
+          .youtube-background-container iframe {
+            width: 177.78vh; /* 100 * 16 / 9 */
+          }
+        }
+
+
+        /* Estilos para el Quiz Interactivo */
+        .quiz-option {
+            border: 1px solid var(--color-gold);
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        .quiz-option:hover, .quiz-option.selected {
+            background-color: var(--color-gold);
+            color: white;
+        }
+        .quiz-step {
+            display: none;
+        }
+        .quiz-step.active {
+            display: block;
+            animation: fadeIn 0.8s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-peach">
+
+    <!-- Contenedor Principal de la Aplicación -->
+    <div id="app" class="antialiased">
+
+        <!-- Header -->
+        <header class="bg-charcoal text-peach sticky top-0 z-50 shadow-lg">
+            <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+                <div class="font-header text-2xl tracking-widest">
+                    <a href="#" class="hover:text-gold transition-all">Fleur de Peau</a>
+                </div>
+                <nav class="hidden md:flex items-center space-x-8 font-body tracking-wider">
+                    <a href="#" class="hover:text-gold transition-all">Las Colecciones</a>
+                    <a href="#" class="hover:text-gold transition-all">El Manifiesto</a>
+                    <a href="#" class="hover:text-gold transition-all">Guía de Siluetas</a>
+                    <a href="#" class="hover:text-gold transition-all">El Atelier</a>
+                </nav>
+                <div class="flex items-center space-x-6">
+                    <!-- Iconos SVG para una apariencia limpia -->
+                    <svg class="w-6 h-6 hover:text-gold transition-all cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    <svg class="w-6 h-6 hover:text-gold transition-all cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                    <svg class="w-6 h-6 hover:text-gold transition-all cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                </div>
+            </div>
+        </header>
+
+        <!-- Contenido Principal -->
+        <main>
+            <!-- Hero Section con Video -->
+            <section class="relative h-[80vh] flex items-center justify-center text-center overflow-hidden">
+                <!-- Contenedor para el video de fondo de YouTube -->
+                <div class="youtube-background-container">
+                    <iframe 
+                        src="https://www.youtube.com/embed/G6eOEGMnVYM?autoplay=1&mute=1&loop=1&playlist=G6eOEGMnVYM&controls=0&showinfo=0&autohide=1&modestbranding=1" 
+                        frameborder="0" 
+                        allow="autoplay; encrypted-media" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
+                <!-- Capa de Oscurecimiento -->
+                <div class="absolute inset-0 bg-black opacity-40 z-10"></div>
+                <!-- Contenido de Texto -->
+                <div class="relative z-20 p-4 text-white">
+                    <h1 class="font-header text-6xl md:text-8xl font-medium tracking-wider">Fleur de Peau</h1>
+                    <p class="font-body text-xl md:text-2xl mt-4 tracking-widest">El arte de habitar tu piel.</p>
+                </div>
+            </section>
+
+            <!-- Curated Products Section -->
+            <section class="py-20">
+                <div class="container mx-auto px-6 text-center">
+                    <h2 class="text-4xl font-header mb-12">Las Siluetas del Momento</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                        <!-- Producto 1: Sostén -->
+                        <div class="group">
+                            <div class="overflow-hidden rounded-lg">
+                                <img src="https://images.unsplash.com/photo-1586179251213-8d3e01d74352?q=80&w=600&h=800&fit=crop" alt="Sostén elegante en tono merlot" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" onerror="this.onerror=null;this.src='https://placehold.co/600x800/4a2a2a/f4e9e1?text=Sostén+Aura';">
+                            </div>
+                            <h3 class="font-header text-2xl mt-4">Sostén Aura Merlot</h3>
+                        </div>
+                        <!-- Producto 2: Panty -->
+                        <div class="group">
+                            <div class="overflow-hidden rounded-lg">
+                                <img src="https://images.unsplash.com/photo-1617137968423-c5ca9a2a1f9a?q=80&w=600&h=800&fit=crop" alt="Panty negro de seda con encaje" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" onerror="this.onerror=null;this.src='https://placehold.co/600x800/1a1a1a/f4e9e1?text=Panty+Lune';">
+                            </div>
+                            <h3 class="font-header text-2xl mt-4">Panty Lune Noir</h3>
+                        </div>
+                        <!-- Producto 3: Body -->
+                        <div class="group">
+                            <div class="overflow-hidden rounded-lg">
+                                <img src="https://images.unsplash.com/photo-1611090998315-8942f1393a45?q=80&w=600&h=800&fit=crop" alt="Body elegante con detalles dorados" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" onerror="this.onerror=null;this.src='https://placehold.co/600x800/8c7851/f4e9e1?text=Body+Soleil';">
+                            </div>
+                            <h3 class="font-header text-2xl mt-4">Body Soleil Oro</h3>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Brand Manifesto Teaser -->
+            <section class="py-20 bg-white">
+                <div class="container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+                    <div class="text-center md:text-left">
+                        <h2 class="font-header text-4xl leading-tight">No vestimos cuerpos, celebramos historias.</h2>
+                        <p class="font-body text-lg mt-6">Cada curva, cada línea, cada textura cuenta una parte de ti. Nuestras piezas están diseñadas para escuchar y honrar esa narrativa.</p>
+                        <button class="font-body mt-8 px-8 py-3 border border-charcoal text-charcoal hover:bg-charcoal hover:text-white transition-all rounded-full tracking-wider">Descubre Nuestra Filosofía</button>
+                    </div>
+                    <div>
+                        <img src="https://images.unsplash.com/photo-1542060748-10c28b62716f?q=80&w=800&h=600&fit=crop" alt="Detalle artístico de diseño de lencería" class="rounded-lg shadow-xl object-cover" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f4e9e1/1a1a1a?text=Diseño';">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Material Focus Section -->
+            <section class="py-20">
+                 <div class="container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+                    <div class="order-2 md:order-1">
+                        <img src="https://images.unsplash.com/photo-1594616619188-9c1d8a756b33?q=80&w=800&h=600&fit=crop" alt="Textura de tela de seda brillante" class="rounded-lg shadow-xl object-cover" onerror="this.onerror=null;this.src='https://placehold.co/800x600/1a1a1a/f4e9e1?text=Seda';">
+                    </div>
+                    <div class="text-center md:text-left order-1 md:order-2">
+                        <h2 class="font-header text-4xl leading-tight">La Caricia de la Tela</h2>
+                        <p class="font-body text-lg mt-6">Desde la seda italiana hasta el encaje de Chantilly, seleccionamos materiales que no solo se ven, sino que se sienten excepcionales.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Launchpad Strategy: The Quiz -->
+            <section id="ritual" class="py-24 bg-white">
+                <div class="container mx-auto px-6 text-center max-w-3xl">
+                    <h2 class="text-4xl font-header text-gold">El Ritual de Autodescubrimiento</h2>
+                    <p class="font-header text-2xl mt-2 mb-8">Revela tu Arquetipo Íntimo</p>
+
+                    <div id="quiz-container">
+                        <!-- Intro Step -->
+                        <div id="quiz-intro" class="quiz-step active">
+                            <p class="text-lg mb-8">La lencería que eliges es un reflejo de tu mundo interior. Te invitamos a un breve viaje de autodescubrimiento para revelar tu arquetipo íntimo. ¿Estás lista para conocerte?</p>
+                            <button onclick="startQuiz()" class="bg-gold text-white font-body tracking-wider px-10 py-3 rounded-full hover:bg-charcoal transition-all">Comenzar el Ritual</button>
+                        </div>
+
+                        <!-- Steps will be populated by JS -->
+
+                        <!-- Email Capture Step -->
+                        <div id="quiz-step-email" class="quiz-step">
+                             <h3 class="font-header text-2xl mb-4">Tu arquetipo está casi listo.</h3>
+                             <p class="mb-6">Introduce tu correo para recibir tu revelación personal, junto con tu acceso prioritario a la colección.</p>
+                             <form onsubmit="showResults(event)">
+                                <input type="email" required placeholder="Tu dirección de correo" class="w-full max-w-md p-3 border border-gold rounded-full text-center focus:outline-none focus:ring-2 focus:ring-gold">
+                                <button type="submit" class="bg-gold text-white font-body tracking-wider px-10 py-3 rounded-full hover:bg-charcoal transition-all mt-6">Revelar mi Arquetipo</button>
+                             </form>
+                        </div>
+
+                        <!-- Results Step -->
+                        <div id="quiz-results" class="quiz-step">
+                            <p class="font-header text-xl">Has sido revelada. Eres la...</p>
+                            <h2 id="archetype-name" class="font-header text-5xl text-gold my-4"></h2>
+                            <p id="archetype-description" class="text-lg mb-8 max-w-xl mx-auto"></p>
+                            <p class="font-bold">Tu acceso prioritario ha sido activado.</p>
+                            <p>Sé la primera en explorar la colección que hemos diseñado pensando en ti.</p>
+                            <button onclick="resetQuiz()" class="mt-8 text-sm text-gold underline">Hacer el ritual de nuevo</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-charcoal text-peach py-16">
+            <div class="container mx-auto px-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+                    <!-- Newsletter Signup -->
+                    <div class="md:col-span-2">
+                        <h3 class="font-header text-2xl mb-2">Únete al Círculo Privado</h3>
+                        <p class="font-body text-sm opacity-80 mb-4">Recibe acceso anticipado a colecciones, editoriales e invitaciones a eventos exclusivos.</p>
+                        <form class="flex">
+                            <input type="email" placeholder="Tu dirección de correo" class="w-full bg-transparent border-b border-gold py-2 text-peach focus:outline-none placeholder-peach placeholder-opacity-50">
+                            <button type="submit" class="bg-gold text-charcoal px-4 py-2 ml-2 rounded-full font-body text-sm hover:bg-peach transition-all">Suscribir</button>
+                        </form>
+                    </div>
+                    <!-- Footer Links -->
+                    <div>
+                        <h4 class="font-header text-xl mb-4">Atención al Cliente</h4>
+                        <ul class="space-y-2 font-body text-sm opacity-80">
+                            <li><a href="#" class="hover:text-gold transition-all">Concierge Personal</a></li>
+                            <li><a href="#" class="hover:text-gold transition-all">Envíos y Devoluciones</a></li>
+                            <li><a href="#" class="hover:text-gold transition-all">Preguntas Frecuentes</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-header text-xl mb-4">La Maison</h4>
+                        <ul class="space-y-2 font-body text-sm opacity-80">
+                            <li><a href="#" class="hover:text-gold transition-all">El Manifiesto</a></li>
+                            <li><a href="#" class="hover:text-gold transition-all">Sostenibilidad</a></li>
+                            <li><a href="#" class="hover:text-gold transition-all">Únete al Equipo</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="mt-12 border-t border-gold border-opacity-20 pt-8 flex flex-col md:flex-row justify-between items-center text-sm font-body opacity-60">
+                    <p>&copy; 2025 Fleur de Peau. Todos los derechos reservados.</p>
+                    <div class="flex space-x-4 mt-4 md:mt-0">
+                        <a href="#" class="hover:text-gold transition-all">Términos y Condiciones</a>
+                        <a href="#" class="hover:text-gold transition-all">Política de Privacidad</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        // Lógica del Quiz Interactivo
+        document.addEventListener('DOMContentLoaded', function() {
+            const quizData = {
+                title: "El Ritual",
+                introduction: "La lencería que eliges es un reflejo de tu mundo interior. Te invitamos a un breve viaje de autodescubrimiento para revelar tu arquetipo íntimo. ¿Estás lista para conocerte?",
+                steps: [
+                    {
+                        question: "Eliges la banda sonora para un atardecer en solitario. ¿Qué suena?",
+                        options: ["Una pieza de piano clásica, melancólica y profunda.", "Un ritmo de bossa nova, suave y sensual.", "El silencio, interrumpido solo por los sonidos de la naturaleza.", "Un track de deep house, elegante y con pulso."],
+                    },
+                    {
+                        question: "Tu día ha sido un caos. Al llegar a casa, buscas esa prenda que te reinicia. ¿Qué sensación anhelas?",
+                        options: ["Un abrazo suave y sin costuras, que casi no se sienta.", "La libertad total, la sensación de no llevar nada.", "Un toque de encaje que te recuerde tu poder y feminidad.", "El soporte estructurado que te hace sentir segura y contenida."],
+                    },
+                    {
+                        question: "Estás empacando para una escapada de fin de semana improvisada. ¿Cuál es el destino?",
+                        options: ["Una cabaña rústica con chimenea en medio del bosque.", "Un hotel boutique en una capital europea llena de arte.", "Una villa minimalista con vistas al mar Mediterráneo.", "Un ryokan sereno en las montañas de Kioto."],
+                    },
+                    {
+                        question: "Elige una textura con los ojos cerrados:",
+                        options: ["La fluidez fresca y lisa de la seda.", "La calidez y suavidad del algodón pima.", "La complejidad táctil de un encaje bordado.", "La estructura elástica y técnica de una microfibra."],
+                    },
+                    {
+                        question: "En una galería de arte, ¿qué obra captura tu atención?",
+                        options: ["Una escultura de mármol de formas clásicas.", "Una fotografía en blanco y negro, cargada de emoción.", "Una pintura abstracta con explosiones de color.", "Una instalación minimalista con líneas puras."],
+                    },
+                    {
+                        question: "Un secreto guardado en tu cajón de lencería sería:",
+                        options: ["Ese conjunto 'demasiado especial para usarlo', esperando una ocasión.", "La prenda más cómoda del mundo, tu verdadero placer culpable.", "Un body de encaje que nadie sabe que tienes.", "La primera pieza de lencería de lujo que te compraste."],
+                    },
+                    {
+                        question: "Finalmente, ¿cómo descubres las marcas que realmente te enamoran?",
+                        options: ["A través de editoriales en revistas de alta gama.", "Por la recomendación de una amiga con un gusto impecable.", "Investigando en blogs de nicho y cuentas de Instagram curadas.", "Cuando la marca cuenta una historia de sostenibilidad y artesanía."],
+                    },
+                ],
+                results: {
+                    archetypes: [
+                        { name: "Arquitecta Sensual", description: "Valoras la estructura y la belleza en igual medida. Para ti, la lencería es una base de poder, una armadura invisible de confianza. Te atraen las líneas limpias, los materiales lujosos y un soporte impecable." },
+                        { name: "Poeta Bohemía", description: "Buscas libertad, confort y una belleza natural. Tu lencería ideal es suave, etérea y sin esfuerzo. Te enamoran los encajes delicados, los tonos tierra y las siluetas que fluyen contigo." },
+                        { name: "Minimalista Mística", description: "Crees que menos es más. Anhelas la pureza, la calidad sobre la cantidad y la perfección en la simplicidad. Te inclinas por las telas como una segunda piel, las paletas monocromáticas y los diseños impecables y sin adornos." }
+                    ]
+                }
+            };
+
+            const quizContainer = document.getElementById('quiz-container');
+            const introStep = document.getElementById('quiz-intro');
+            const emailStep = document.getElementById('quiz-step-email');
+            let currentStep = 0;
+            let userAnswers = [];
+
+            function buildQuiz() {
+                quizData.steps.forEach((step, index) => {
+                    const stepEl = document.createElement('div');
+                    stepEl.id = `quiz-step-${index}`;
+                    stepEl.classList.add('quiz-step');
+                    
+                    let optionsHTML = step.options.map((option, optionIndex) => `
+                        <div class="quiz-option rounded-full mb-4" onclick="nextStep(${index}, ${optionIndex})">
+                            ${option}
+                        </div>
+                    `).join('');
+
+                    stepEl.innerHTML = `
+                        <p class="text-sm text-gold tracking-widest mb-2">Paso ${index + 1} de ${quizData.steps.length}</p>
+                        <h3 class="font-header text-2xl mb-8">${step.question}</h3>
+                        <div>${optionsHTML}</div>
+                    `;
+                    quizContainer.insertBefore(stepEl, emailStep);
+                });
+            }
+
+            window.startQuiz = function() {
+                introStep.classList.remove('active');
+                document.getElementById('quiz-step-0').classList.add('active');
+            }
+
+            window.nextStep = function(stepIndex, optionIndex) {
+                userAnswers.push(optionIndex);
+                const currentStepEl = document.getElementById(`quiz-step-${stepIndex}`);
+                currentStepEl.classList.remove('active');
+
+                if (stepIndex + 1 < quizData.steps.length) {
+                    const nextStepEl = document.getElementById(`quiz-step-${stepIndex + 1}`);
+                    nextStepEl.classList.add('active');
+                } else {
+                    emailStep.classList.add('active');
+                }
+            }
+
+            window.showResults = function(event) {
+                event.preventDefault();
+                emailStep.classList.remove('active');
+                
+                // Simple logic to pick a random archetype for demonstration
+                const archetypes = quizData.results.archetypes;
+                const randomIndex = Math.floor(Math.random() * archetypes.length);
+                const result = archetypes[randomIndex];
+                
+                document.getElementById('archetype-name').textContent = result.name;
+                document.getElementById('archetype-description').textContent = result.description;
+
+                document.getElementById('quiz-results').classList.add('active');
+            }
+            
+            window.resetQuiz = function() {
+                document.getElementById('quiz-results').classList.remove('active');
+                userAnswers = [];
+                currentStep = 0;
+                introStep.classList.add('active');
+            }
+
+            buildQuiz();
+        });
+    </script>
+
+</body>
+</html>
